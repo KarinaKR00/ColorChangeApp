@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol ColorViewControllerDelegate {
-    func changeColor()
-}
-
 class MainViewController: UIViewController {
 
     // MARK: - Outlet
@@ -30,11 +26,16 @@ class MainViewController: UIViewController {
     @IBOutlet var blueTextField: UITextField!
     @IBOutlet var greenTextField: UITextField!
     
+    var color: UIColor!
+    
+    var delegate: MainViewControllerDelegate!
+    
     
     // MARK: - Life Cicle
     override func viewDidLoad() {
         super.viewDidLoad()
         colorChange.layer.cornerRadius = 15
+        colorChange.backgroundColor = color
         changeColor()
         setValue(for: redLabel, greenLabel, blueLabel )
         setValueTF()
@@ -56,23 +57,20 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func doneAction(_ sender: Any) {
+        delegate.getColor(for: colorChange.backgroundColor ?? .green)
+        dismiss(animated: true)
     }
     
    
     
     // MARK: - Private Method
     
- 
-    extension MainViewController: ColorViewControllerDelegate {
-        func changeColor() {
-              colorChange.backgroundColor = UIColor(
-                  red: CGFloat(redSlider.value),
-                  green: CGFloat(greenSlider.value),
-                  blue: CGFloat(blueSlider.value),
-                  alpha: 1)
-          }
-    }
-
+    private func changeColor() {
+        colorChange.backgroundColor = UIColor(
+            red: CGFloat(redSlider.value),
+            green: CGFloat(greenSlider.value),
+            blue: CGFloat(blueSlider.value),
+            alpha: 1)
     }
     
     private func setValue(for labels: UILabel...) {
@@ -94,6 +92,5 @@ class MainViewController: UIViewController {
         greenTextField.text = greenLabel.text
     }
     
-    
-}
 
+}

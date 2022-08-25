@@ -8,6 +8,10 @@
 import UIKit
 
 
+protocol MainViewControllerDelegate {
+    func getColor(for: UIColor)
+}
+
 class ColorViewController: UIViewController {
 
     
@@ -15,12 +19,20 @@ class ColorViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    var delegate: ColorViewControllerDelegate!
-   
-    @IBAction func unwindSegue(segue: UIStoryboardSegue) {
-        guard var colorView = segue.destination as? ColorViewController else { return }
-        colorView.view.backgroundColor = colorChange.backgroundColor
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let mainVC = segue.destination as? MainViewController else { return }
+        mainVC.color = view.backgroundColor
+        mainVC.delegate = self
+    }
+}
+
+
+
+extension ColorViewController: MainViewControllerDelegate {
+    
+    func getColor(for color: UIColor) {
+        view.backgroundColor = color
     }
     
-
+    
 }
